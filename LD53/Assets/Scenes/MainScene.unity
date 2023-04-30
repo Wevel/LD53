@@ -664,24 +664,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51f6fcb8a090fa4ca50c8a837942f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectNames:
-  - Health Potion
-  - Strength Potion
-  - Invisibility Potion
-  - Agility Potion
-  - Ration
-  - Wooden Shield
-  - Arrow
-  - Knife
-  - Dagger
-  - Spear
-  - Sword
-  - Helmet
-  - Candle
-  - Rope
-  - Chalk
-  - Skull
-  - Femur
+  itemNames:
+  - name: Health Potion
+    initialWeight: 1
+    finalWeight: 2
+    minAmount: 1
+    maxAmount: 3
+  - name: Strength Potion
+    initialWeight: 1
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 2
+  - name: Invisibility Potion
+    initialWeight: 1
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 2
+  - name: Agility Potion
+    initialWeight: 1
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 2
+  - name: Ration
+    initialWeight: 1
+    finalWeight: 0.5
+    minAmount: 1
+    maxAmount: 2
+  - name: Wooden Shield
+    initialWeight: 1
+    finalWeight: 0.01
+    minAmount: 1
+    maxAmount: 1
+  - name: Arrow
+    initialWeight: 1
+    finalWeight: 0.3
+    minAmount: 5
+    maxAmount: 10
+  - name: Dagger
+    initialWeight: 1
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 2
+  - name: Knife
+    initialWeight: 1
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 2
+  - name: Spear
+    initialWeight: 0.5
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 2
+  - name: Iron Helmet
+    initialWeight: 0.5
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 1
+  - name: Short Sword
+    initialWeight: 0.5
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 1
+  - name: Candle
+    initialWeight: 0.1
+    finalWeight: 1
+    minAmount: 3
+    maxAmount: 6
+  - name: Rope
+    initialWeight: 0.4
+    finalWeight: 1
+    minAmount: 2
+    maxAmount: 4
+  - name: Chalk
+    initialWeight: 0.01
+    finalWeight: 1
+    minAmount: 2
+    maxAmount: 4
+  - name: Skull
+    initialWeight: 0.01
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 6
+  - name: Femur
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 5
 --- !u!1 &1476885893
 GameObject:
   m_ObjectHideFlags: 0

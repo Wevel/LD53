@@ -6,9 +6,25 @@ using Random = System.Random;
 
 public class MissionGenerator : MonoBehaviour
 {
+	[System.Serializable]
+	public struct ItemName
+	{
+		public string name;
+		public float initialWeight;
+		public float finalWeight;
+		public int minAmount;
+		public int maxAmount;
+
+		public float GetWeight(float progress)
+		{
+			if (initialWeight < finalWeight) return Mathf.Clamp(Mathf.Lerp(initialWeight, finalWeight, progress), initialWeight, finalWeight);
+			else return Mathf.Clamp(Mathf.Lerp(initialWeight, finalWeight, progress), finalWeight, initialWeight);
+		}
+	}
+
 	public static MissionGenerator instance { get; private set; }
 
-	public string[] objectNames;
+	public ItemName[] itemNames;
 
 	void Awake()
 	{
@@ -17,9 +33,25 @@ public class MissionGenerator : MonoBehaviour
 		else Destroy(gameObject);
 	}
 
+	public ItemName GetRandomItem(Random random, float progress)
+	{
+		float totalWeight = 0;
+		foreach (ItemName item in itemNames) totalWeight += item.GetWeight(progress);
+
+		float value = (float)random.NextDouble() * totalWeight;
+		foreach (ItemName item in itemNames)
+		{
+			value -= item.GetWeight(progress);
+			if (value <= 0) return item;
+		}
+
+		return new ItemName() { name = "!!?@&&???!!", initialWeight = 0, finalWeight = 0 };
+	}
+
 	public Mission GenerateMission(Map map, TileState start, TileState end, Random random)
 	{
-		string name = $"x{random.Next(1, 2) + end.FloorNumber} {objectNames[random.Next(objectNames.Length)]}";
+		ItemName item = GetRandomItem(random, end.FloorNumber / 10f);
+		string name = $"{item.name} x{random.Next(item.minAmount, item.maxAmount) + end.FloorNumber}";
 		List<PathNode> bestPath = Pathfinding.FindPath(map, start, end);
 		if (bestPath == null || bestPath.Count <= 8) return null;
 
