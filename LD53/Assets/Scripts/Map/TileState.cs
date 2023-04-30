@@ -33,4 +33,9 @@ public class TileState
 	{
 		this.tileType = tileType;
 	}
+
+	override public string ToString()
+	{
+		return $"({floor.floorNumber}, {x}, {y}, {tileType})";
+	}
 }

@@ -131,7 +131,7 @@ public class Map : MonoBehaviour
 		{
 			mapTiles[target.x, target.y].SetTarget(true);
 		}
-		else
+		else if (target.FloorNumber > currentFloor)
 		{
 			foreach (Vector2Int stair in GetFloor(currentFloor).Stairs) mapTiles[stair.x, stair.y].SetTarget(true);
 		}

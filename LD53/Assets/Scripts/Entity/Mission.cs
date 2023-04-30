@@ -16,14 +16,16 @@ public class Mission
 	public readonly string name;
 	public readonly TileState initialPosition;
 	public readonly TileState target;
+	public readonly int pathLength;
 	public readonly int timeLimit;
 	public readonly int score;
 
-	public Mission(string name, TileState initialPosition, TileState target, int timeLimit, int score)
+	public Mission(string name, TileState initialPosition, TileState target, int pathLength, int timeLimit, int score)
 	{
 		this.name = name;
 		this.initialPosition = initialPosition;
 		this.target = target;
+		this.pathLength = pathLength;
 		this.timeLimit = timeLimit;
 		this.score = score;
 	}

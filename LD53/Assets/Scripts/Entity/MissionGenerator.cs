@@ -23,9 +23,10 @@ public class MissionGenerator : MonoBehaviour
 		List<PathNode> bestPath = Pathfinding.FindPath(map, start, end);
 		if (bestPath == null || bestPath.Count <= 5) return null;
 
-		int timeLimit = Mathf.CeilToInt(bestPath.Count * Mathf.Max(3f - (end.FloorNumber * 0.2f), 1.05f));
-		int score = (5 * end.FloorNumber) + (10 * (end.FloorNumber - start.FloorNumber)) + (timeLimit / 20);
+		int pathLength = bestPath.Count;
+		int timeLimit = Mathf.CeilToInt(pathLength * Mathf.Max(3f - (end.FloorNumber * 0.2f), 1.1f));
+		int score = (5 * end.FloorNumber) + (5 * (end.FloorNumber - start.FloorNumber)) + (timeLimit / 20);
 
-		return new Mission(name, start, end, timeLimit, score);
+		return new Mission(name, start, end, pathLength, timeLimit, score);
 	}
 }

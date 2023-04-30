@@ -44,6 +44,11 @@ public class PathNode
 		return floorNumber.GetHashCode() ^ x.GetHashCode() ^ y.GetHashCode();
 	}
 
+	public override string ToString()
+	{
+		return $"({floorNumber}, {x}, {y})";
+	}
+
 	public void UpdateParent(PathNode parent)
 	{
 		this.parent = parent;
@@ -105,7 +110,9 @@ public static class Pathfinding
 			}
 			path.Reverse();
 
+			Debug.Log($"Start {start} to target {target} length {path.Count}");
 			return path;
+
 		}
 		else
 		{

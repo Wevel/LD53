@@ -277,7 +277,7 @@ public class Floor
 		foreach (Vector2Int targetLocation in targetLocations)
 		{
 			if (targetLocation.x == map.player.x && targetLocation.y == map.player.y) continue;
-			newMission = MissionGenerator.instance.GenerateMission(map, GetTile(map.player.x, map.player.y), GetTile(targetLocation.x, targetLocation.y), missionRandom);
+			newMission = MissionGenerator.instance.GenerateMission(map, map.GetTile(map.currentFloor, map.player.x, map.player.y), GetTile(targetLocation.x, targetLocation.y), missionRandom);
 			if (newMission != null) possibleMissions.Add(newMission);
 		}
 

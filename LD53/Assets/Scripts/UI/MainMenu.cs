@@ -217,7 +217,7 @@ public class MainMenu : MonoBehaviour
 		for (int i = 0; i < possibleMissions.Count; i++)
 		{
 			int index = i;
-			addButton($"[#{possibleMissions[index].score}] {possibleMissions[index].name}", () => selectMission(index), ButtonType.Mission);
+			addButton($"[${possibleMissions[index].score}] {possibleMissions[index].name}", () => selectMission(index), ButtonType.Mission);
 		}
 
 		updateSelectedButton();
@@ -225,7 +225,7 @@ public class MainMenu : MonoBehaviour
 
 	private void selectMission(int index)
 	{
-		Debug.Log("Selected Mission " + possibleMissions[index].name);
+		Debug.Log($"Selected Mission {possibleMissions[index].name} ({possibleMissions[index].score}) with length {possibleMissions[index].pathLength} time limit {possibleMissions[index].timeLimit}");
 		clearMenu();
 		currentMap.player.StartMission(possibleMissions[index]);
 		state = MenuState.Running;
