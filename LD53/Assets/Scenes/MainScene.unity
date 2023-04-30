@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 913181384}
   - component: {fileID: 913181383}
   - component: {fileID: 913181382}
+  - component: {fileID: 913181386}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -508,6 +509,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1347, y: 758}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &913181386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913181381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d5b694454ca2d341b674790f1fe3b76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonPositionX: 7
+  buttonPositionY: 12
+  buttonSpacing: 4
+  buttonWidth: 12
+  startButtonText: Play
+  restartButtonText: Restart
+  resumeButtonText: Resume
+  menuButtonText: Menu
+  exitButtonText: Exit
+  mainMenuMapPrefab: {fileID: 8141473369842231368, guid: ad1db260223d75048b19ecf67c23688a, type: 3}
+  mainGameMapPrefab: {fileID: 8141473369842231368, guid: 12d3820093e7fb94ca73ceb4f530409b, type: 3}
+  canvas: {fileID: 1391005201}
 --- !u!1 &1391005200
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,9 +542,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1391005201}
-  - component: {fileID: 1391005203}
   m_Layer: 5
-  m_Name: MainMenuMap
+  m_Name: Maps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -545,20 +569,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1391005203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391005200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d5b694454ca2d341b674790f1fe3b76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainMenuMapPrefab: {fileID: 8141473369842231368, guid: ad1db260223d75048b19ecf67c23688a, type: 3}
-  mainGameMapPrefab: {fileID: 8141473369842231368, guid: 12d3820093e7fb94ca73ceb4f530409b, type: 3}
 --- !u!1 &1476885893
 GameObject:
   m_ObjectHideFlags: 0

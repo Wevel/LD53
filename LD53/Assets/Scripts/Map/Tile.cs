@@ -12,6 +12,10 @@ public abstract class Tile : MonoBehaviour
 	public int x { get; protected set; }
 	public int y { get; protected set; }
 
+	private char frontValue = '\0';
+	private char backValue = ' ';
+	private bool visible = true;
+
 	private void Awake()
 	{
 		RectTransform thisRectTransform = GetComponent<RectTransform>();
@@ -33,12 +37,25 @@ public abstract class Tile : MonoBehaviour
 	public void SetVisible(bool visible)
 	{
 		if (map.seeAll) visible = true;
+		this.visible = visible;
 		text.enabled = visible;
 	}
 
-	public void SetValue(char value)
+	public void SetValue(char value, bool front = false)
 	{
-		text.text = value + "";
+		if (front) frontValue = value;
+		else backValue = value;
+
+		if (frontValue != '\0')
+		{
+			text.text = frontValue + "";
+			text.enabled = true;
+		}
+		else
+		{
+			text.text = backValue + "";
+			text.enabled = visible;
+		}
 	}
 
 	public void Jiggle(float duration = 0.1f)

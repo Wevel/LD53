@@ -46,7 +46,7 @@ public class Map : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (player != null)
+		if (player != null && !MainMenu.instance.paused)
 		{
 			if (player.moveX != 0 || player.moveY != 0) Tick();
 		}

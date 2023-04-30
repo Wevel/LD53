@@ -11,6 +11,7 @@ public class AutoPlayer : Player
 		moveX = 0;
 		moveY = 0;
 
+		if (MainMenu.instance.paused) return;
 		if (!map.GetFloor(map.currentFloor).generated) return;
 
 		if (path == null || path.Count == 0)

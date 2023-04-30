@@ -27,6 +27,9 @@ public class Player : Entity
 		moveX = 0;
 		moveY = 0;
 
+		if (MainMenu.instance.paused) return;
+		if (!map.GetFloor(map.currentFloor).generated) return;
+
 		if (Input.GetButtonDown("Activate"))
 		{
 			map.ActivateTile(targetX, targetY);
