@@ -33,6 +33,8 @@ public class AutoPlayer : Player
 
 			// Pick a random target
 			TileState targetTile = possibleTarget[Random.Range(0, possibleTarget.Count)];
+			map.ClearTargets();
+			map.HighlightTarget(targetTile);
 
 			// Find path to target
 			path = Pathfinding.FindPath(map, map.GetTile(map.currentFloor, x, y), targetTile);
