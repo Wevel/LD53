@@ -45,14 +45,27 @@ public class Player : Entity
 
 		if (MainMenu.instance.paused) return;
 		if (!map.GetFloor(map.currentFloor).generated) return;
-		if (currentMission == null) MainMenu.instance.MissionSelect(Mission.Outcome.None);
-		else if (currentMission.IsSuccess(this)) CompleteMission();
-
-		if (Input.GetButtonDown("Activate"))
+		if (currentMission == null)
 		{
-			map.ActivateTile(targetX, targetY);
+			MainMenu.instance.MissionSelect(Mission.Outcome.None);
 		}
-		else if (Time.time - lastMoveTime < moveDelayCurve.Evaluate(consecutiveMoves))
+		else
+		{
+			if (currentMission.target.FloorNumber > map.currentFloor)
+			{
+				if (map.GetTile(map.currentFloor, x, y).tileType == TileState.TileType.StairsDown) map.ActivateTile(x, y);
+			}
+
+			if (currentMission.IsSuccess(this)) CompleteMission();
+		}
+
+
+		// if (Input.GetButtonDown("Activate"))
+		// {
+		// 	map.ActivateTile(targetX, targetY);
+		// }
+		// else 
+		if (Time.time - lastMoveTime < moveDelayCurve.Evaluate(consecutiveMoves))
 		{
 			if (UserInput.instance.VerticalDown) moveY = UserInput.instance.Vertical;
 			else if (UserInput.instance.HorizontalDown) moveX = UserInput.instance.Horizontal;
