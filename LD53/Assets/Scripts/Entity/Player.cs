@@ -20,9 +20,9 @@ public class Player : Entity
 		set
 		{
 			if (_currentMission == value) return;
-			if (_currentMission != null && _currentMission.target.FloorNumber == map.currentFloor) map.mapTiles[_currentMission.target.x, _currentMission.target.y].SetTarget(false);
 			_currentMission = value;
-			if (_currentMission != null && _currentMission.target.FloorNumber == map.currentFloor) map.mapTiles[_currentMission.target.x, _currentMission.target.y].SetTarget(true);
+			map.ClearTargets();
+			map.HighlightTarget(_currentMission.target);
 		}
 	}
 

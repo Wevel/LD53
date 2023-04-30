@@ -62,7 +62,6 @@ public abstract class Tile : MonoBehaviour
 	public void SetTarget(bool target)
 	{
 		this.target = target;
-		visible |= target;
 		SetJiggle(target);
 		UpdateDisplay();
 	}

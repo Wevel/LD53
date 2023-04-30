@@ -84,8 +84,11 @@ public class Map : MonoBehaviour
 
 		floors[currentFloor].ReDraw();
 		ClearVisibility();
+		ClearTargets();
 		player.SetStartPosition(floors[currentFloor].SpawnTile);
 		player.StartFloor();
+
+		if (player.currentMission != null) HighlightTarget(player.currentMission.target);
 	}
 
 	public void GenerateMap(int mapSeed = -1, bool generateOverTime = false)
@@ -114,6 +117,23 @@ public class Map : MonoBehaviour
 					else if (LineOfSight(x, y, x1, y1, farViewRange)) mapTiles[x1, y1].SetVisible(true);
 				}
 			}
+		}
+	}
+
+	public void ClearTargets()
+	{
+		foreach (MapTile tile in mapTiles) tile.SetTarget(false);
+	}
+
+	public void HighlightTarget(TileState target)
+	{
+		if (target.FloorNumber == currentFloor)
+		{
+			mapTiles[target.x, target.y].SetTarget(true);
+		}
+		else
+		{
+			foreach (Vector2Int stair in GetFloor(currentFloor).Stairs) mapTiles[stair.x, stair.y].SetTarget(true);
 		}
 	}
 
