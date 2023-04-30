@@ -43,7 +43,7 @@ public class Player : Entity
 		moveX = 0;
 		moveY = 0;
 
-		if (MainMenu.instance.paused) return;
+		if (MainMenu.instance.paused || map.transitioning) return;
 		if (!map.GetFloor(map.currentFloor).generated) return;
 		if (currentMission == null)
 		{

@@ -117,6 +117,8 @@ public abstract class Tile : MonoBehaviour
 
 	public void UpdateDisplay()
 	{
+		if (map.transitioning) return;
+
 		if (layers[(int)Layer.Overlay] != null && !MainMenu.instance.menuHidden)
 		{
 			text.text = layers[(int)Layer.Overlay].GetString(target);

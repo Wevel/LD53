@@ -20,6 +20,8 @@ public class Map : MonoBehaviour
 	public int currentFloor { get; private set; } = -1;
 	private int seedOffset = 0;
 
+	public bool transitioning { get; private set; } = false;
+
 	// Start is called before the first frame update
 	void Awake()
 	{
@@ -82,6 +84,8 @@ public class Map : MonoBehaviour
 
 		Debug.Log($"Current floor: {currentFloor}");
 
+		StartTransition();
+
 		player.Hide();
 		floors[currentFloor].ReDraw();
 		ClearVisibility();
@@ -91,11 +95,14 @@ public class Map : MonoBehaviour
 		player.Show();
 
 		if (player.currentMission != null) HighlightTarget(player.currentMission.target);
+
+		EndTransition();
 	}
 
 	public void GenerateMap(int mapSeed = -1, bool generateOverTime = false)
 	{
 		seedOffset = mapSeed > 0 ? mapSeed : Random.Range(0, 1000000);
+		Debug.Log($"Map seed: {seedOffset}");
 		NextFloor(generateOverTime);
 		Tick();
 	}
@@ -220,5 +227,26 @@ public class Map : MonoBehaviour
 	public List<Mission> GetMissions()
 	{
 		return floors[currentFloor].GetMissions();
+	}
+
+	public void StartTransition()
+	{
+		transitioning = true;
+	}
+
+	public void EndTransition()
+	{
+		IEnumerator endTransitionCoroutine()
+		{
+			for (int y = height - 1; y >= 0; y--)
+			{
+				for (int x = 0; x < width; x++) mapTiles[x, y].UpdateDisplay();
+				yield return new WaitForSeconds(0.02f);
+			}
+		}
+
+		transitioning = false;
+
+		StartCoroutine(endTransitionCoroutine());
 	}
 }

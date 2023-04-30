@@ -6,7 +6,6 @@ Could do:
 	Monsters (no)
 	Moving targets
 	Collected required items (no)
-	Transitions for floor/menu change
 	Screen shake when you lose a life
 	
 Music:

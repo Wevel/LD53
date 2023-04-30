@@ -149,6 +149,8 @@ public class MainMenu : MonoBehaviour
 
 	private void showStartMenuButtons()
 	{
+		currentMap.StartTransition();
+
 		clearMenu();
 		addButton(startButtonText, StartGame);
 		if (Sounds.instance.muted) addButton(unMuteButtonText, () => { UnmuteGame(); showStartMenuButtons(); currentButton = 1; updateSelectedButton(); });
@@ -157,6 +159,8 @@ public class MainMenu : MonoBehaviour
 		addButton(exitButtonText, ExitGame);
 #endif
 		updateSelectedButton();
+
+		currentMap.EndTransition();
 	}
 
 	public void PauseMenu()
@@ -169,6 +173,8 @@ public class MainMenu : MonoBehaviour
 
 	private void showPauseMenuButtons()
 	{
+		currentMap.StartTransition();
+
 		clearMenu();
 		updateScore();
 		addButton(resumeButtonText, ResumeGame);
@@ -180,6 +186,8 @@ public class MainMenu : MonoBehaviour
 		addButton(exitButtonText, ExitGame);
 #endif
 		updateSelectedButton();
+
+		currentMap.EndTransition();
 	}
 
 	public void StartGame()
@@ -195,11 +203,15 @@ public class MainMenu : MonoBehaviour
 
 	public void ResumeGame()
 	{
+		currentMap.StartTransition();
+
 		Debug.Log("Resume Game");
 		state = MenuState.Running;
 
 		clearMenu();
 		updateScore();
+
+		currentMap.EndTransition();
 	}
 
 	public void MuteGame()
@@ -234,6 +246,8 @@ public class MainMenu : MonoBehaviour
 
 	private void showMissionSelectButtons()
 	{
+		currentMap.StartTransition();
+
 		clearMenu();
 		updateScore();
 
@@ -248,15 +262,21 @@ public class MainMenu : MonoBehaviour
 		}
 
 		updateSelectedButton();
+
+		currentMap.EndTransition();
 	}
 
 	private void selectMission(int index)
 	{
+		currentMap.StartTransition();
+
 		Debug.Log($"Selected Mission {possibleMissions[index].name} ({possibleMissions[index].score}) with length {possibleMissions[index].pathLength} time limit {possibleMissions[index].timeLimit}");
 		clearMenu();
 		updateScore();
 		currentMap.player.StartMission(possibleMissions[index]);
 		state = MenuState.Running;
+
+		currentMap.EndTransition();
 	}
 
 	public void GameOver()
@@ -269,12 +289,16 @@ public class MainMenu : MonoBehaviour
 
 	private void showGameOverButtons()
 	{
+		currentMap.StartTransition();
+
 		clearMenu();
 		updateScore();
 		setButtonHeader($"You're not up to it!  F{currentMap.currentFloor} ${currentMap.player.score}", ButtonType.Mission);
 		addButton(restartButtonText, StartGame, ButtonType.Mission);
 		addButton(menuButtonText, StartMenu, ButtonType.Mission);
 		updateSelectedButton();
+
+		currentMap.EndTransition();
 	}
 
 	public void ExitGame()
