@@ -59,7 +59,6 @@ public class Player : Entity
 			if (currentMission.IsSuccess(this)) CompleteMission();
 		}
 
-
 		// if (Input.GetButtonDown("Activate"))
 		// {
 		// 	map.ActivateTile(targetX, targetY);

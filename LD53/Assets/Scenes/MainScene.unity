@@ -610,7 +610,7 @@ MonoBehaviour:
   buttonPositionY: 20
   buttonSpacing: 4
   buttonWidth: 12
-  missionButtonWidth: 32
+  missionButtonWidth: 35
   startButtonText: Play
   restartButtonText: Restart
   resumeButtonText: Resume

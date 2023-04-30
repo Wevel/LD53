@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
 	public int buttonPositionY = 24;
 	public int buttonSpacing = 4;
 	public int buttonWidth = 12;
-	public int missionButtonWidth = 32;
+	public int missionButtonWidth = 35;
 	public string startButtonText = "Play";
 	public string restartButtonText = "Restart";
 	public string resumeButtonText = "Resume";
@@ -124,6 +124,8 @@ public class MainMenu : MonoBehaviour
 				menuHidden = false;
 			}
 		}
+
+		updateScore();
 	}
 
 	public void StartMenu()
@@ -159,8 +161,10 @@ public class MainMenu : MonoBehaviour
 	private void showPauseMenuButtons()
 	{
 		clearMenu();
+		updateScore();
 		addButton(resumeButtonText, ResumeGame);
 		addButton(restartButtonText, StartGame);
+		addButton(menuButtonText, StartMenu, ButtonType.Mission);
 #if UNITY_STANDALONE && !UNITY_EDITOR
 		addButton(exitButtonText, ExitGame);
 #endif
@@ -184,6 +188,7 @@ public class MainMenu : MonoBehaviour
 		state = MenuState.Running;
 
 		clearMenu();
+		updateScore();
 	}
 
 	public void MissionSelect(Mission.Outcome outcome)
@@ -207,10 +212,11 @@ public class MainMenu : MonoBehaviour
 	private void showMissionSelectButtons()
 	{
 		clearMenu();
+		updateScore();
 
-		if (lastMissionOutcome == Mission.Outcome.Success) setButtonHeader("What'll it be today...", ButtonType.Mission);
-		else if (lastMissionOutcome == Mission.Outcome.Failure) setButtonHeader("Not good enough...", ButtonType.Mission);
-		else setButtonHeader("What'll you start with...", ButtonType.Mission);
+		if (lastMissionOutcome == Mission.Outcome.Success) setButtonHeader("What'll it be today?", ButtonType.Mission);
+		else if (lastMissionOutcome == Mission.Outcome.Failure) setButtonHeader("Not good enough!", ButtonType.Mission);
+		else setButtonHeader("What'll you start with?", ButtonType.Mission);
 
 		for (int i = 0; i < possibleMissions.Count; i++)
 		{
@@ -225,6 +231,7 @@ public class MainMenu : MonoBehaviour
 	{
 		Debug.Log($"Selected Mission {possibleMissions[index].name} ({possibleMissions[index].score}) with length {possibleMissions[index].pathLength} time limit {possibleMissions[index].timeLimit}");
 		clearMenu();
+		updateScore();
 		currentMap.player.StartMission(possibleMissions[index]);
 		state = MenuState.Running;
 	}
@@ -240,7 +247,8 @@ public class MainMenu : MonoBehaviour
 	private void showGameOverButtons()
 	{
 		clearMenu();
-		setButtonHeader($"You're not up to it... {currentMap.player.completedMissions} -> ${currentMap.player.score}", ButtonType.Mission);
+		updateScore();
+		setButtonHeader($"You're not up to it!  F{currentMap.currentFloor} ${currentMap.player.score}", ButtonType.Mission);
 		addButton(restartButtonText, StartGame, ButtonType.Mission);
 		addButton(menuButtonText, StartMenu, ButtonType.Mission);
 		updateSelectedButton();
@@ -268,8 +276,36 @@ public class MainMenu : MonoBehaviour
 		}
 	}
 
+	public void updateScore()
+	{
+		if (currentMap != null && currentMap.player != null)
+		{
+			string scoreText = $"${currentMap.player.score:000000}";
+			string livesText = $"Lives: {currentMap.player.lives:0}";
+			string timerText = currentMap.player.timeRemaining != int.MaxValue ? $"Timer: {currentMap.player.timeRemaining:000}" : "";
+			string floorText = $"F{currentMap.currentFloor}";
+
+			// Clear row
+			for (int x = 2; x < currentMap.width - 2; x++) currentMap.mapTiles[x, currentMap.height - 2].SetValue(' ', "", "", Tile.Layer.Overlay);
+
+			if (currentMap.player is not AutoPlayer)
+			{
+				// Draw lives in top left
+				for (int i = 0; i < livesText.Length; i++) currentMap.mapTiles[i + 4, currentMap.height - 2].SetValue(livesText[i], "", "", Tile.Layer.Overlay);
+
+				// Draw score and timer in top middle
+				string text = scoreText + "     " + timerText;
+				for (int i = 0; i < text.Length; i++) currentMap.mapTiles[i + (currentMap.width / 2) - 9, currentMap.height - 2].SetValue(text[i], "", "", Tile.Layer.Overlay);
+			}
+
+			// Draw floor in top right
+			for (int i = 0; i < floorText.Length; i++) currentMap.mapTiles[i + currentMap.width - 7, currentMap.height - 2].SetValue(floorText[i], "", "", Tile.Layer.Overlay);
+		}
+	}
+
 	private void setButtonHeader(string text, ButtonType type = ButtonType.Standard)
 	{
+		Debug.Log($"Set button header '{text}' (length {text.Length})");
 		int y = buttonPositionY;
 		isButtonHeader = true;
 

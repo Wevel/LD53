@@ -6,6 +6,9 @@ using Random = System.Random;
 
 public class Floor
 {
+	public const int TopEdge = 3;
+	public const int SideEdge = 2;
+
 	public readonly Map map;
 	public readonly int width;
 	public readonly int height;
@@ -86,7 +89,7 @@ public class Floor
 		void queueWall(TileState tile)
 		{
 			if (tile == null) return;
-			if (tile.x == 0 || tile.x == width - 1 || tile.y == 0 || tile.y == height - 1) return;
+			if (tile.x < SideEdge || tile.x >= width - SideEdge || tile.y < SideEdge || tile.y >= height - TopEdge) return;
 			if (!openWalls.Contains(tile)) openWalls.Add(tile);
 		}
 
@@ -97,7 +100,7 @@ public class Floor
 		void queueNeighbour(TileState tile)
 		{
 			if (tile == null) return;
-			if (tile.x == 0 || tile.x == width - 1 || tile.y == 0 || tile.y == height - 1) return;
+			if (tile.x < SideEdge || tile.x >= width - SideEdge || tile.y < SideEdge || tile.y >= height - TopEdge) return;
 			if (tile.tileType == TileState.TileType.Wall && !openWalls.Contains(tile)) neighbours.Add(tile);
 		}
 
@@ -131,7 +134,7 @@ public class Floor
 		// Generate rooms
 		bool isWall(int x, int y)
 		{
-			if (x < 1 || x >= width - 1 || y < 1 || y >= height - 1) return false;
+			if (x < SideEdge || x >= width - SideEdge || y < SideEdge || y >= height - TopEdge) return false;
 			return mapTiles[x, y].tileType == TileState.TileType.Wall;
 		}
 
@@ -155,7 +158,7 @@ public class Floor
 
 		IEnumerator addRandomRoom(int x, int y)
 		{
-			yield return addRoom(x, y, random.Next(3, 8), random.Next(3, 8));
+			yield return addRoom(x, y, random.Next(3, 5), random.Next(3, 5));
 		}
 
 		IEnumerator addRandomCorridor(int x, int y)
@@ -172,12 +175,12 @@ public class Floor
 
 		int numStairs = random.Next(2, 3);
 		int numTargets = random.Next(5, 7);
-		int numCorridors = random.Next(20, 25);
+		int numCorridors = random.Next(16, 20) + Mathf.Max(0, 12 - floorNumber);
 
 		for (int i = 0; i < numStairs; i++)
 		{
-			int x = random.Next(2, width - 2);
-			int y = random.Next(2, height - 2);
+			int x = random.Next(SideEdge, width - SideEdge);
+			int y = random.Next(SideEdge, height - TopEdge);
 			mapTiles[x, y].Set(TileState.TileType.StairsDown);
 			stairs.Add(new Vector2Int(x, y));
 			yield return addRandomRoom(x, y);
@@ -185,8 +188,8 @@ public class Floor
 
 		for (int i = 0; i < numTargets; i++)
 		{
-			int x = random.Next(2, width - 2);
-			int y = random.Next(2, height - 2);
+			int x = random.Next(SideEdge, width - SideEdge);
+			int y = random.Next(SideEdge, height - TopEdge);
 			mapTiles[x, y].Set(TileState.TileType.Empty);
 			entities.Add(map.CreateEntity(x, y, map.targetPrefab));
 			targetLocations.Add(new Vector2Int(x, y));
@@ -195,13 +198,13 @@ public class Floor
 
 		for (int i = 0; i < numCorridors; i++)
 		{
-			int x = random.Next(4, width - 4);
-			int y = random.Next(4, height - 4);
+			int x = random.Next(SideEdge, width - SideEdge);
+			int y = random.Next(SideEdge, height - TopEdge);
 			mapTiles[x, y].Set(TileState.TileType.Empty);
 			yield return addRandomCorridor(x, y);
 		}
 
-		yield return addRoom(width / 2, height / 2, 8, 5);
+		yield return addRoom(width / 2, height / 2, 6, 5);
 
 		if (floorNumber == map.currentFloor)
 			ReDraw();

@@ -1,8 +1,9 @@
 Need to do:
-	Highlight targets more
 	Show current score
 	Show current lives
 	Sounds
+	Rebalance floor difficulty
+		Earlier floors need more corridors, later ones need fewer
 
 Could do:
 	Doors
@@ -10,3 +11,5 @@ Could do:
 	Moving targets
 	Collected required items (no)
 	Transitions for floor/menu change
+	Screen shake when you lose a life
+	Tile jiggle around player ?

@@ -21,7 +21,7 @@ public class MissionGenerator : MonoBehaviour
 	{
 		string name = $"x{random.Next(1, 2) + end.FloorNumber} {objectNames[random.Next(objectNames.Length)]}";
 		List<PathNode> bestPath = Pathfinding.FindPath(map, start, end);
-		if (bestPath == null || bestPath.Count <= 5) return null;
+		if (bestPath == null || bestPath.Count <= 8) return null;
 
 		int pathLength = bestPath.Count;
 		int timeLimit = Mathf.CeilToInt(pathLength * Mathf.Max(3f - (end.FloorNumber * 0.2f), 1.1f));
