@@ -222,11 +222,7 @@ public class Floor
 	public void Hide()
 	{
 		// Hide entities
-		foreach (Entity entity in entities)
-		{
-			entity.gameObject.SetActive(false);
-			entity.SetVisible(false);
-		}
+		foreach (Entity entity in entities) entity.gameObject.SetActive(false);
 	}
 
 	public void ReDraw()
@@ -240,11 +236,7 @@ public class Floor
 		}
 
 		// Show entities
-		foreach (Entity entity in entities)
-		{
-			entity.gameObject.SetActive(true);
-			entity.SetVisible(true);
-		}
+		foreach (Entity entity in entities) entity.gameObject.SetActive(true);
 	}
 
 	public void ActivateTile(int x, int y)

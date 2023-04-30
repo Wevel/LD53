@@ -12,7 +12,19 @@ public class Player : Entity
 	public int completedMissions { get; protected set; } = 0;
 	public int completedMissionsThisFloor { get; protected set; } = 0;
 	public int timeRemaining { get; protected set; } = int.MaxValue;
-	public Mission currentMission { get; protected set; } = null;
+
+	private Mission _currentMission = null;
+	public Mission currentMission
+	{
+		get { return _currentMission; }
+		set
+		{
+			if (_currentMission == value) return;
+			if (_currentMission != null && _currentMission.target.FloorNumber == map.currentFloor) map.mapTiles[_currentMission.target.x, _currentMission.target.y].SetTarget(false);
+			_currentMission = value;
+			if (_currentMission != null && _currentMission.target.FloorNumber == map.currentFloor) map.mapTiles[_currentMission.target.x, _currentMission.target.y].SetTarget(true);
+		}
+	}
 
 	protected float lastMoveTime;
 	protected int consecutiveMoves;
@@ -20,7 +32,6 @@ public class Player : Entity
 	protected override void Start()
 	{
 		base.Start();
-		SetValue('@');
 		lastMoveTime = Time.time;
 		consecutiveMoves = 0;
 		lives = startingLives;

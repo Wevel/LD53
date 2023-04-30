@@ -49,7 +49,7 @@ public class MainMenu : MonoBehaviour
 	public bool paused { get => state != MenuState.Running && state != MenuState.Start; }
 	public bool started { get => state != MenuState.Start; }
 
-	private bool menuHidden = false;
+	public bool menuHidden { get; private set; } = false;
 
 	private readonly List<MenuAction> menuButtons = new List<MenuAction>();
 	private int currentButton = 0;
@@ -112,32 +112,14 @@ public class MainMenu : MonoBehaviour
 		// Toggle menu visibility
 		if (Input.GetKeyDown(KeyCode.F2))
 		{
-			menuHidden = !menuHidden;
-
-			if (menuHidden)
+			if (currentMap != null)
 			{
-				clearMenu();
+				menuHidden = !menuHidden;
+				currentMap.UpdateDisplay();
 			}
 			else
 			{
-				switch (state)
-				{
-					case MenuState.Start:
-						showStartMenuButtons();
-						break;
-					case MenuState.Pause:
-						showPauseMenuButtons();
-						break;
-					case MenuState.MissionSelect:
-						showMissionSelectButtons();
-						break;
-					case MenuState.GameOver:
-						showGameOverButtons();
-						break;
-					default:
-						clearMenu();
-						break;
-				}
+				menuHidden = false;
 			}
 		}
 	}
@@ -280,7 +262,7 @@ public class MainMenu : MonoBehaviour
 		{
 			for (int y = 0; y < currentMap.height; y++)
 			{
-				currentMap.mapTiles[x, y].SetValue('\0', front: true);
+				currentMap.mapTiles[x, y].SetValue('\0', Tile.Layer.Overlay);
 			}
 		}
 	}
@@ -301,17 +283,17 @@ public class MainMenu : MonoBehaviour
 
 		for (int i = 0; i < text.Length; i++)
 		{
-			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', front: true);
-			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', front: true);
-			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], front: true);
-			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', front: true);
-			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', front: true);
+			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', Tile.Layer.Overlay);
 		}
 
 		for (int i = 0; i < 5; i++)
 		{
-			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', front: true);
-			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', front: true);
+			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
 		}
 	}
 
@@ -333,17 +315,17 @@ public class MainMenu : MonoBehaviour
 
 		for (int i = 0; i < text.Length; i++)
 		{
-			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', front: true);
-			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', front: true);
-			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], front: true);
-			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', front: true);
-			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', front: true);
+			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', Tile.Layer.Overlay);
 		}
 
 		for (int i = 0; i < 5; i++)
 		{
-			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', front: true);
-			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', front: true);
+			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
 		}
 	}
 
@@ -358,8 +340,8 @@ public class MainMenu : MonoBehaviour
 
 			y = buttonPositionY - (i * buttonSpacing);
 			if (isButtonHeader) y -= buttonSpacing;
-			currentMap.mapTiles[buttonPositionX, y].SetValue(buttonChar, front: true);
-			currentMap.mapTiles[buttonPositionX + currentButtonWidth - 1, y].SetValue(buttonChar, front: true);
+			currentMap.mapTiles[buttonPositionX, y].SetValue(buttonChar, Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + currentButtonWidth - 1, y].SetValue(buttonChar, Tile.Layer.Overlay);
 		}
 	}
 }

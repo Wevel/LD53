@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Entity : Tile
+public abstract class Entity : MonoBehaviour
 {
+	public Map map;
+
 	public int closeViewRange = 5;
 	public int farViewRange = 10;
+	public char displayChar;
+
+	public int x { get; protected set; }
+	public int y { get; protected set; }
 
 	public int moveX { get; protected set; }
 	public int moveY { get; protected set; }
@@ -15,12 +21,11 @@ public abstract class Entity : Tile
 
 	protected virtual void Start()
 	{
-		SetVisible(true);
 		moveX = 0;
 		moveY = 0;
 	}
 
-	protected abstract void Update();
+	protected virtual void Update() { }
 
 	public virtual void DoMove()
 	{
@@ -39,10 +44,11 @@ public abstract class Entity : Tile
 		SetStartPosition(tile.x, tile.y);
 	}
 
-	override public void SetPosition(int x, int y)
+	public virtual void SetPosition(int x, int y)
 	{
-		map.mapTiles[x, y].SetVisible(true);
-		base.SetPosition(x, y);
-		map.mapTiles[x, y].SetVisible(false);
+		map.mapTiles[this.x, this.y].SetValue('\0', Tile.Layer.Foreground);
+		this.x = x;
+		this.y = y;
+		map.mapTiles[this.x, this.y].SetValue(displayChar, Tile.Layer.Foreground);
 	}
 }

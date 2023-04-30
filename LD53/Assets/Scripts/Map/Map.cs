@@ -59,8 +59,6 @@ public class Map : MonoBehaviour
 	{
 		Entity entity = Instantiate(prefab, transform);
 		entity.map = this;
-		entity.rectTransform.sizeDelta = new Vector2(MainMenu.instance.gridSize, MainMenu.instance.gridSize);
-		entity.text.fontSize = MainMenu.instance.textSize;
 		entity.SetStartPosition(x, y);
 		return entity;
 	}
@@ -99,10 +97,7 @@ public class Map : MonoBehaviour
 
 	public void ClearVisibility()
 	{
-		foreach (MapTile tile in mapTiles)
-		{
-			tile.SetVisible(false);
-		}
+		foreach (MapTile tile in mapTiles) tile.SetVisible(false);
 	}
 
 	public void UpdateVisibility(int x, int y, int closeViewRange, int farViewRange)
@@ -120,6 +115,11 @@ public class Map : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public void UpdateDisplay()
+	{
+		foreach (MapTile tile in mapTiles) tile.UpdateDisplay();
 	}
 
 	public void Tick()

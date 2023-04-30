@@ -5,27 +5,67 @@ using TMPro;
 
 public abstract class Tile : MonoBehaviour
 {
+	public enum Layer : int
+	{
+		Background = 0,
+		Foreground = 1,
+		Overlay = 2
+	}
+
 	public RectTransform rectTransform;
 	public TextMeshProUGUI text;
 	public Map map;
+	public bool jiggle = false;
 
 	public int x { get; protected set; }
 	public int y { get; protected set; }
 
-	private char frontValue = '\0';
-	private char backValue = ' ';
+	protected char[] layers;
 	private bool visible = true;
+	private bool target = false;
+
+	private float jiggleSpeed = 2f;
+	private float jiggleScale = 15f;
 
 	private void Awake()
 	{
 		RectTransform thisRectTransform = GetComponent<RectTransform>();
 		thisRectTransform.sizeDelta = rectTransform.sizeDelta;
+		layers = new char[3];
+		SetJiggle(false);
 	}
 
-	// void Start()
-	// {
-	// 	Jiggle(10f);
-	// }
+	void Update()
+	{
+		if (jiggle && layers[(int)Layer.Overlay] == '\0')
+		{
+			rectTransform.rotation = Quaternion.Euler(0f, 0f, Animations.instance.tileJiggleCurve.Evaluate(Time.time * jiggleSpeed) * jiggleScale);
+		}
+	}
+
+	public void SetJiggle(bool jiggle)
+	{
+		this.jiggle = jiggle;
+
+		if (jiggle)
+		{
+			jiggleSpeed = 2f;
+			jiggleScale = 15f + Random.Range(-4f, 4f);
+			if (Random.value < 0.5) jiggleScale *= -1f;
+		}
+		else
+		{
+			rectTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
+		}
+	}
+
+	public void SetTarget(bool target)
+	{
+		this.target = target;
+		visible |= target;
+		SetJiggle(target);
+		UpdateDisplay();
+	}
 
 	public virtual void SetPosition(int x, int y)
 	{
@@ -37,69 +77,32 @@ public abstract class Tile : MonoBehaviour
 	public void SetVisible(bool visible)
 	{
 		this.visible = visible;
-
-		if (frontValue != '\0') text.enabled = true;
-		else text.enabled = visible || map.seeAll;
+		UpdateDisplay();
 	}
 
-	public void SetValue(char value, bool front = false)
+	public void SetValue(char value, Layer layer)
 	{
-		if (front) frontValue = value;
-		else backValue = value;
+		layers[(int)layer] = value;
+		UpdateDisplay();
+	}
 
-		if (frontValue != '\0')
+	public void UpdateDisplay()
+	{
+		if (layers[(int)Layer.Overlay] != '\0' && !MainMenu.instance.menuHidden)
 		{
-			text.text = frontValue + "";
+			text.text = layers[(int)Layer.Overlay] + "";
 			text.enabled = true;
+			return;
 		}
-		else
+
+		for (int i = layers.Length - 2; i >= 0; i--)
 		{
-			text.text = backValue + "";
-			text.enabled = visible || map.seeAll;
-		}
-	}
-
-	public void Jiggle(float duration = 0.1f)
-	{
-		IEnumerator jiggleCoroutine()
-		{
-			// Make random movement to rotation for duration
-			float time = 0f;
-
-			IEnumerator moveFrame(float amount)
+			if (layers[i] != '\0')
 			{
-				time += Time.deltaTime;
-				rectTransform.rotation = Quaternion.Euler(0f, 0f, amount);
-				yield return null;
+				text.text = layers[i] + "";
+				text.enabled = visible || map.seeAll || target;
+				break;
 			}
-
-			float speed = 8f + Random.Range(-4f, 4f);
-			if (Random.value < 0.5) speed *= -1f;
-
-			while (time < duration)
-			{
-				yield return moveFrame(speed);
-				yield return moveFrame(speed);
-				yield return moveFrame(speed);
-				yield return moveFrame(speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(-speed);
-				yield return moveFrame(speed);
-				yield return moveFrame(speed);
-				yield return moveFrame(speed);
-				yield return moveFrame(speed);
-			}
-
-			// Reset rotation
-			rectTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		}
-
-		StartCoroutine(jiggleCoroutine());
 	}
 }

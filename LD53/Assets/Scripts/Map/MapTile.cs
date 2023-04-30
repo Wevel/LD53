@@ -22,7 +22,7 @@ public class MapTile : Tile
 		if (TileMap.TryGetValue(tileType, out char value))
 		{
 			this.tileType = tileType;
-			SetValue(value);
+			SetValue(value, Layer.Background);
 		}
 		else
 		{
