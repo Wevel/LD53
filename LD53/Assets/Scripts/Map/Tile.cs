@@ -30,6 +30,7 @@ public abstract class Tile : MonoBehaviour
 	public TextMeshProUGUI text;
 	public Map map;
 	public bool jiggle = false;
+	public float jiggleTime = 0f;
 
 	public int x { get; protected set; }
 	public int y { get; protected set; }
@@ -51,9 +52,18 @@ public abstract class Tile : MonoBehaviour
 
 	void Update()
 	{
-		if (jiggle && layers[(int)Layer.Overlay] == null)
+		if (layers[(int)Layer.Overlay] == null)
 		{
-			rectTransform.rotation = Quaternion.Euler(0f, 0f, Animations.instance.tileJiggleCurve.Evaluate(Time.time * jiggleSpeed) * jiggleScale);
+			if (jiggleTime > 0)
+			{
+				if (jiggleTime > 0) jiggleTime -= Time.deltaTime;
+				if (jiggleTime <= 0) rectTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
+				else rectTransform.rotation = Quaternion.Euler(0f, 0f, Animations.instance.tileJiggleCurve.Evaluate(Time.time * jiggleSpeed * 2) * jiggleScale / 2);
+			}
+			else if (jiggle)
+			{
+				rectTransform.rotation = Quaternion.Euler(0f, 0f, Animations.instance.tileJiggleCurve.Evaluate(Time.time * jiggleSpeed) * jiggleScale);
+			}
 		}
 	}
 

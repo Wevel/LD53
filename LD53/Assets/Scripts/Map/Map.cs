@@ -65,7 +65,7 @@ public class Map : MonoBehaviour
 
 	public void GenerateFloor(bool generateOverTime = false)
 	{
-		Floor floor = new Floor(this, width, height, floors.Count, floors.Count + seedOffset);
+		Floor floor = new Floor(this, width, height, floors.Count, (floors.Count * 923423983) + seedOffset);
 
 		if (generateOverTime) floor.GenerateOverTime();
 		else floor.Generate();

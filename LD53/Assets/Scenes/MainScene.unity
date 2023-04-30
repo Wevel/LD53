@@ -613,6 +613,8 @@ MonoBehaviour:
   missionButtonWidth: 35
   startButtonText: Play
   restartButtonText: Restart
+  muteButtonText: Mute
+  unMuteButtonText: Unmute
   resumeButtonText: Resume
   menuButtonText: Menu
   exitButtonText: Exit
@@ -860,6 +862,141 @@ MonoBehaviour:
     finalWeight: 0.4
     minAmount: 5
     maxAmount: 15
+  - name: Wool Hat
+    initialWeight: 1
+    finalWeight: 0.7
+    minAmount: 1
+    maxAmount: 1
+  - name: Walking Cane
+    initialWeight: 0.01
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 1
+  - name: Tent
+    initialWeight: 0.01
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 1
+  - name: Teapot
+    initialWeight: 0.1
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 1
+  - name: Tea
+    initialWeight: 0.1
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 4
+  - name: Cofee Bean
+    initialWeight: 0.1
+    finalWeight: 0.5
+    minAmount: 3
+    maxAmount: 8
+  - name: Chicken
+    initialWeight: 0.2
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 2
+  - name: "BL\xC5HAJ"
+    initialWeight: 0.0001
+    finalWeight: 0.001
+    minAmount: 1
+    maxAmount: 1
+  - name: Wheelbarrow
+    initialWeight: 0.01
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 1
+  - name: Saw
+    initialWeight: 0.5
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 1
+  - name: Bone Saw
+    initialWeight: 0.2
+    finalWeight: 0.5
+    minAmount: 1
+    maxAmount: 1
+  - name: Bandage
+    initialWeight: 0.1
+    finalWeight: 1
+    minAmount: 3
+    maxAmount: 7
+  - name: Stick
+    initialWeight: 0.1
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 3
+  - name: Blood Sack
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 3
+  - name: Rotten Foot
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 1
+  - name: Snail
+    initialWeight: 0.05
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 4
+  - name: Square Shield
+    initialWeight: 0.05
+    finalWeight: 0.5
+    minAmount: 1
+    maxAmount: 1
+  - name: Tower Shield
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 1
+  - name: Pike
+    initialWeight: 0.01
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 1
+  - name: Machete
+    initialWeight: 0.2
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 1
+  - name: Trident
+    initialWeight: 0.01
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 1
+  - name: Club
+    initialWeight: 1
+    finalWeight: 0.01
+    minAmount: 1
+    maxAmount: 1
+  - name: Sickle
+    initialWeight: 0.1
+    finalWeight: 0.4
+    minAmount: 1
+    maxAmount: 1
+  - name: Shovel
+    initialWeight: 0.8
+    finalWeight: 0.4
+    minAmount: 1
+    maxAmount: 2
+  - name: Mace
+    initialWeight: 0.1
+    finalWeight: 0.4
+    minAmount: 1
+    maxAmount: 1
+  - name: Scythe
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 1
+  - name: "Zweih\xE4nder"
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 1
 --- !u!1 &1476885893
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,6 +28,8 @@ public class MainMenu : MonoBehaviour
 	public int missionButtonWidth = 35;
 	public string startButtonText = "Play";
 	public string restartButtonText = "Restart";
+	public string muteButtonText = "Mute";
+	public string unMuteButtonText = "Unmute";
 	public string resumeButtonText = "Resume";
 	public string menuButtonText = "Menu";
 	public string exitButtonText = "Exit";
@@ -149,6 +151,8 @@ public class MainMenu : MonoBehaviour
 	{
 		clearMenu();
 		addButton(startButtonText, StartGame);
+		if (Sounds.instance.muted) addButton(unMuteButtonText, () => { UnmuteGame(); showStartMenuButtons(); currentButton = 1; updateSelectedButton(); });
+		else addButton(muteButtonText, () => { MuteGame(); showStartMenuButtons(); currentButton = 1; updateSelectedButton(); });
 #if UNITY_STANDALONE && !UNITY_EDITOR
 		addButton(exitButtonText, ExitGame);
 #endif
@@ -169,7 +173,9 @@ public class MainMenu : MonoBehaviour
 		updateScore();
 		addButton(resumeButtonText, ResumeGame);
 		addButton(restartButtonText, StartGame);
-		addButton(menuButtonText, StartMenu, ButtonType.Mission);
+		if (Sounds.instance.muted) addButton(unMuteButtonText, () => { UnmuteGame(); showPauseMenuButtons(); currentButton = 2; updateSelectedButton(); });
+		else addButton(muteButtonText, () => { MuteGame(); showPauseMenuButtons(); currentButton = 2; updateSelectedButton(); });
+		addButton(menuButtonText, StartMenu);
 #if UNITY_STANDALONE && !UNITY_EDITOR
 		addButton(exitButtonText, ExitGame);
 #endif
@@ -182,7 +188,7 @@ public class MainMenu : MonoBehaviour
 
 		if (currentMap != null) Destroy(currentMap.gameObject);
 		currentMap = Instantiate(mainGameMapPrefab, canvas);
-		currentMap.GenerateMap(0);
+		currentMap.GenerateMap();
 		currentMap.GenerateFloor();
 		state = MenuState.Running;
 	}
@@ -194,6 +200,18 @@ public class MainMenu : MonoBehaviour
 
 		clearMenu();
 		updateScore();
+	}
+
+	public void MuteGame()
+	{
+		Debug.Log("Mute Game");
+		Sounds.instance.Mute();
+	}
+
+	public void UnmuteGame()
+	{
+		Debug.Log("Unmute Game");
+		Sounds.instance.Unmute();
 	}
 
 	public void MissionSelect(Mission.Outcome outcome)

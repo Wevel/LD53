@@ -108,6 +108,15 @@ public class Player : Entity
 				else MainMenu.instance.MissionSelect(Mission.Outcome.Failure);
 			}
 		}
+
+		for (int px = -1; px <= 1; px++)
+		{
+			for (int py = -1; py <= 1; py++)
+			{
+				if (px == 0 && py == 0) continue;
+				map.mapTiles[x + px, y + py].jiggleTime = 0.25f;
+			}
+		}
 	}
 
 	public void StartFloor()
