@@ -6,10 +6,26 @@ public class MainMenu : MonoBehaviour
 {
 	public delegate void MenuAction();
 
+	public enum MenuState
+	{
+		Start,
+		Running,
+		Pause,
+		MissionSelect,
+		GameOver,
+	}
+
+	public enum ButtonType
+	{
+		Standard,
+		Mission
+	}
+
 	public int buttonPositionX = 7;
-	public int buttonPositionY = 12;
+	public int buttonPositionY = 24;
 	public int buttonSpacing = 4;
 	public int buttonWidth = 12;
+	public int missionButtonWidth = 32;
 	public string startButtonText = "Play";
 	public string restartButtonText = "Restart";
 	public string resumeButtonText = "Resume";
@@ -21,15 +37,27 @@ public class MainMenu : MonoBehaviour
 	public Map mainMenuMapPrefab;
 	public Map mainGameMapPrefab;
 
-	public RectTransform canvas;
+
+	public float gridSize = 25f;
+	public float textSize = 23f;
+
+	public RectTransform canvas { get; private set; }
 
 	private Map currentMap = null;
 
-	public bool paused { get; private set; } = false;
-	public bool started { get; private set; } = false;
+	public MenuState state { get; private set; } = MenuState.Start;
+	public bool paused { get => state != MenuState.Running && state != MenuState.Start; }
+	public bool started { get => state != MenuState.Start; }
+
+	private bool menuHidden = false;
 
 	private readonly List<MenuAction> menuButtons = new List<MenuAction>();
 	private int currentButton = 0;
+	private bool isButtonHeader = false;
+	private int currentButtonWidth = 0;
+
+	private List<Mission> possibleMissions;
+	private Mission.Outcome lastMissionOutcome = Mission.Outcome.None;
 
 	void Awake()
 	{
@@ -40,6 +68,7 @@ public class MainMenu : MonoBehaviour
 
 	void Start()
 	{
+		canvas = GetComponent<RectTransform>();
 		StartMenu();
 	}
 
@@ -67,31 +96,84 @@ public class MainMenu : MonoBehaviour
 				menuButtons[currentButton]();
 			}
 		}
+
+#if UNITY_EDITOR
+		// Toggle entire map visibility
+		if (Input.GetKeyDown(KeyCode.F1))
+		{
+			if (currentMap != null)
+			{
+				currentMap.seeAll = !currentMap.seeAll;
+				currentMap.GetFloor(currentMap.currentFloor).ReDraw();
+			}
+		}
+#endif
+
+		// Toggle menu visibility
+		if (Input.GetKeyDown(KeyCode.F2))
+		{
+			menuHidden = !menuHidden;
+
+			if (menuHidden)
+			{
+				clearMenu();
+			}
+			else
+			{
+				switch (state)
+				{
+					case MenuState.Start:
+						showStartMenuButtons();
+						break;
+					case MenuState.Pause:
+						showPauseMenuButtons();
+						break;
+					case MenuState.MissionSelect:
+						showMissionSelectButtons();
+						break;
+					case MenuState.GameOver:
+						showGameOverButtons();
+						break;
+					default:
+						clearMenu();
+						break;
+				}
+			}
+		}
 	}
 
 	public void StartMenu()
 	{
 		Debug.Log("Start Menu");
+		state = MenuState.Start;
 
 		if (currentMap != null) Destroy(currentMap.gameObject);
 		currentMap = Instantiate(mainMenuMapPrefab, canvas);
 		currentMap.GenerateMap(generateOverTime: true);
 
+		showStartMenuButtons();
+	}
+
+	private void showStartMenuButtons()
+	{
 		clearMenu();
 		addButton(startButtonText, StartGame);
 #if UNITY_STANDALONE && !UNITY_EDITOR
 		addButton(exitButtonText, ExitGame);
 #endif
 		updateSelectedButton();
-
-		paused = false;
-		started = false;
 	}
 
 	public void PauseMenu()
 	{
 		Debug.Log("Pause Menu");
+		state = MenuState.Pause;
 
+		showPauseMenuButtons();
+	}
+
+	private void showPauseMenuButtons()
+	{
 		clearMenu();
 		addButton(resumeButtonText, ResumeGame);
 		addButton(restartButtonText, StartGame);
@@ -100,7 +182,6 @@ public class MainMenu : MonoBehaviour
 #endif
 		updateSelectedButton();
 
-		paused = true;
 	}
 
 	public void StartGame()
@@ -110,16 +191,76 @@ public class MainMenu : MonoBehaviour
 		if (currentMap != null) Destroy(currentMap.gameObject);
 		currentMap = Instantiate(mainGameMapPrefab, canvas);
 		currentMap.GenerateMap(0);
-		paused = false;
-		started = true;
+		currentMap.GenerateFloor();
+		state = MenuState.Running;
 	}
 
 	public void ResumeGame()
 	{
 		Debug.Log("Resume Game");
+		state = MenuState.Running;
 
 		clearMenu();
-		paused = false;
+	}
+
+	public void MissionSelect(Mission.Outcome outcome)
+	{
+		Debug.Log("Mission Select");
+		state = MenuState.MissionSelect;
+
+		possibleMissions = currentMap.GetMissions();
+		lastMissionOutcome = outcome;
+
+		if (possibleMissions.Count == 0)
+		{
+			Debug.Log("No missions available");
+			GameOver();
+			return;
+		}
+
+		showMissionSelectButtons();
+	}
+
+	private void showMissionSelectButtons()
+	{
+		clearMenu();
+
+		if (lastMissionOutcome == Mission.Outcome.Success) setButtonHeader("What'll it be today...", ButtonType.Mission);
+		else if (lastMissionOutcome == Mission.Outcome.Failure) setButtonHeader("Not good enough...", ButtonType.Mission);
+		else setButtonHeader("What'll you start with...", ButtonType.Mission);
+
+		for (int i = 0; i < possibleMissions.Count; i++)
+		{
+			int index = i;
+			addButton($"[#{possibleMissions[index].score}] {possibleMissions[index].name}", () => selectMission(index), ButtonType.Mission);
+		}
+
+		updateSelectedButton();
+	}
+
+	private void selectMission(int index)
+	{
+		Debug.Log("Selected Mission " + possibleMissions[index].name);
+		clearMenu();
+		currentMap.player.StartMission(possibleMissions[index]);
+		state = MenuState.Running;
+	}
+
+	public void GameOver()
+	{
+		Debug.Log("Game Over");
+		state = MenuState.GameOver;
+
+		showGameOverButtons();
+	}
+
+	private void showGameOverButtons()
+	{
+		clearMenu();
+		setButtonHeader($"You're not up to it... {currentMap.player.score}", ButtonType.Mission);
+		addButton(restartButtonText, StartGame, ButtonType.Mission);
+		addButton(menuButtonText, StartMenu, ButtonType.Mission);
+		updateSelectedButton();
 	}
 
 	public void ExitGame()
@@ -133,6 +274,7 @@ public class MainMenu : MonoBehaviour
 	{
 		menuButtons.Clear();
 		currentButton = 0;
+		isButtonHeader = false;
 
 		for (int x = 0; x < currentMap.width; x++)
 		{
@@ -143,13 +285,49 @@ public class MainMenu : MonoBehaviour
 		}
 	}
 
-	private void addButton(string text, MenuAction action)
+	private void setButtonHeader(string text, ButtonType type = ButtonType.Standard)
+	{
+		int y = buttonPositionY;
+		isButtonHeader = true;
+
+		int width = buttonWidth;
+		if (type == ButtonType.Mission) width = missionButtonWidth;
+		currentButtonWidth = width;
+
+		int leftPadding = (width - text.Length) / 2;
+		int rightPadding = width - text.Length - leftPadding;
+
+		text = new string(' ', leftPadding) + text + new string(' ', rightPadding);
+
+		for (int i = 0; i < text.Length; i++)
+		{
+			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', front: true);
+			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', front: true);
+			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], front: true);
+			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', front: true);
+			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', front: true);
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', front: true);
+			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', front: true);
+		}
+	}
+
+	private void addButton(string text, MenuAction action, ButtonType type = ButtonType.Standard)
 	{
 		int y = buttonPositionY - (menuButtons.Count * buttonSpacing);
+		if (isButtonHeader) y -= buttonSpacing;
+
 		menuButtons.Add(action);
 
-		int leftPadding = (buttonWidth - text.Length) / 2;
-		int rightPadding = buttonWidth - text.Length - leftPadding;
+		int width = buttonWidth;
+		if (type == ButtonType.Mission) width = missionButtonWidth;
+		currentButtonWidth = width;
+
+		int leftPadding = (width - text.Length) / 2;
+		int rightPadding = width - text.Length - leftPadding;
 
 		text = new string(' ', leftPadding) + text + new string(' ', rightPadding);
 
@@ -179,8 +357,9 @@ public class MainMenu : MonoBehaviour
 			else buttonChar = ' ';
 
 			y = buttonPositionY - (i * buttonSpacing);
+			if (isButtonHeader) y -= buttonSpacing;
 			currentMap.mapTiles[buttonPositionX, y].SetValue(buttonChar, front: true);
-			currentMap.mapTiles[buttonPositionX + buttonWidth - 1, y].SetValue(buttonChar, front: true);
+			currentMap.mapTiles[buttonPositionX + currentButtonWidth - 1, y].SetValue(buttonChar, front: true);
 		}
 	}
 }

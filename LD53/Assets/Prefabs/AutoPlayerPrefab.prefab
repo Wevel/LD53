@@ -193,3 +193,37 @@ MonoBehaviour:
   startingMoveDelay: 0.5
   minMoveDelay: 0.2
   maxMoveSteps: 5
+  startingLives: 3
+  moveDelayCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.35
+      inSlope: -0.2740736
+      outSlope: -0.2740736
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.0049640816
+    - serializedVersion: 3
+      time: 1.4346085
+      value: 0.16111352
+      inSlope: -0.055090368
+      outSlope: -0.055090368
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3676038
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5
+      value: 0.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -62,8 +62,6 @@ public static class Pathfinding
 
 	public static List<PathNode> FindPath(Map map, TileState start, TileState target) // GetHCost getHCost
 	{
-		bool useStairs = target.FloorNumber > start.FloorNumber;
-
 		// TODO A* pathfinding
 		Queue<PathNode> open = new Queue<PathNode>();
 		List<PathNode> closed = new List<PathNode>();
@@ -94,7 +92,7 @@ public static class Pathfinding
 			tryQueue(new PathNode(map.GetTile(current.floorNumber, current.x, current.y - 1), current));
 			tryQueue(new PathNode(map.GetTile(current.floorNumber, current.x, current.y + 1), current));
 
-			if (useStairs && current.tile.tileType == TileState.TileType.StairsDown) tryQueue(new PathNode(map.GetFloor(current.floorNumber + 1).SpawnTile, current));
+			if (target.FloorNumber > current.floorNumber && current.tile.tileType == TileState.TileType.StairsDown) tryQueue(new PathNode(map.GetFloor(current.floorNumber + 1).SpawnTile, current));
 		}
 
 		if (current.Equals(targetNode))

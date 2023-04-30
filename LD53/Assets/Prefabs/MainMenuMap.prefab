@@ -52,6 +52,6 @@ MonoBehaviour:
   mapTilePrefab: {fileID: 8622993266059735163, guid: b146d313ddc57de4f8513c23f072fcae, type: 3}
   playerPrefab: {fileID: 3487135986169381469, guid: 6734dbc5326f68c4a91517c1ba91e228, type: 3}
   targetPrefab: {fileID: 9080562719908391931, guid: 0a2f54197496b76448279d460b4c3ebf, type: 3}
-  width: 50
-  height: 50
+  gridSize: 25
+  textSize: 22
   seeAll: 1

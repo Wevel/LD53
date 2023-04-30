@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Player : Entity
 {
-	public float startingMoveDelay = 0.5f;
-	public float minMoveDelay = 0.1f;
-	public int maxMoveSteps = 5;
+	public int startingLives = 3;
+	public AnimationCurve moveDelayCurve;
+
+	public int lives { get; protected set; }
+	public int score { get; protected set; } = 0;
+	public int completedMissions { get; protected set; } = 0;
+	public int completedMissionsThisFloor { get; protected set; } = 0;
+	public int timeRemaining { get; protected set; } = int.MaxValue;
+	public Mission currentMission { get; protected set; } = null;
 
 	protected float lastMoveTime;
 	protected int consecutiveMoves;
-	protected float currentMoveDelay;
 
 	protected override void Start()
 	{
@@ -18,7 +23,7 @@ public class Player : Entity
 		SetValue('@');
 		lastMoveTime = Time.time;
 		consecutiveMoves = 0;
-		currentMoveDelay = startingMoveDelay;
+		lives = startingLives;
 	}
 
 	protected override void Update()
@@ -29,12 +34,14 @@ public class Player : Entity
 
 		if (MainMenu.instance.paused) return;
 		if (!map.GetFloor(map.currentFloor).generated) return;
+		if (currentMission == null) MainMenu.instance.MissionSelect(Mission.Outcome.None);
+		else if (currentMission.IsSuccess(this)) CompleteMission();
 
 		if (Input.GetButtonDown("Activate"))
 		{
 			map.ActivateTile(targetX, targetY);
 		}
-		else if (Time.time - lastMoveTime < currentMoveDelay)
+		else if (Time.time - lastMoveTime < moveDelayCurve.Evaluate(consecutiveMoves))
 		{
 			if (Input.GetButtonDown("Vertical")) moveY = (int)Mathf.Sign(Input.GetAxisRaw("Vertical"));
 			else if (Input.GetButtonDown("Horizontal")) moveX = (int)Mathf.Sign(Input.GetAxisRaw("Horizontal"));
@@ -42,7 +49,6 @@ public class Player : Entity
 			if (moveX != 0 || moveY != 0)
 			{
 				lastMoveTime = Time.time;
-				currentMoveDelay = startingMoveDelay;
 				consecutiveMoves = 0;
 			}
 		}
@@ -54,15 +60,53 @@ public class Player : Entity
 			if (moveX != 0 || moveY != 0)
 			{
 				lastMoveTime = Time.time;
-
-				if (consecutiveMoves < maxMoveSteps) consecutiveMoves++;
-				currentMoveDelay = Mathf.Lerp(startingMoveDelay, minMoveDelay, consecutiveMoves / (float)maxMoveSteps);
+				consecutiveMoves++;
 			}
 			else
 			{
 				consecutiveMoves = 0;
 			}
 		}
+	}
+
+	public override void DoMove()
+	{
+		base.DoMove();
+
+		if (currentMission != null)
+		{
+			timeRemaining--;
+
+			if (timeRemaining <= 0)
+			{
+				lives--;
+				if (lives == 0) MainMenu.instance.GameOver();
+				else MainMenu.instance.MissionSelect(Mission.Outcome.Failure);
+			}
+		}
+	}
+
+	public void StartFloor()
+	{
+		completedMissionsThisFloor = 0;
+	}
+
+	public void StartMission(Mission mission)
+	{
+		currentMission = mission;
+		timeRemaining = mission.timeLimit;
+	}
+
+	public void CompleteMission()
+	{
+		if (currentMission != null)
+		{
+			score += currentMission.score;
+			completedMissions++;
+			completedMissionsThisFloor++;
+		}
+
+		MainMenu.instance.MissionSelect(Mission.Outcome.Success);
 	}
 
 	public override void SetPosition(int x, int y)

@@ -42,15 +42,18 @@ public class AutoPlayer : Player
 				Debug.LogWarning("No valid path");
 				return;
 			}
+
+			consecutiveMoves = 0;
 		}
 
 		// Move along current path
-		if (Time.time - lastMoveTime > minMoveDelay)
+		if (Time.time - lastMoveTime > moveDelayCurve.Evaluate(consecutiveMoves))
 		{
 			moveX = path[0].x - x;
 			moveY = path[0].y - y;
 			path.RemoveAt(0);
 			lastMoveTime = Time.time;
+			consecutiveMoves++;
 		}
 	}
 }

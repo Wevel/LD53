@@ -7,13 +7,14 @@ public class Map : MonoBehaviour
 	public MapTile mapTilePrefab;
 	public Player playerPrefab;
 	public TargetEntity targetPrefab;
-	public int width = 50;
-	public int height = 50;
 
 	public bool seeAll = false;
 
 	public MapTile[,] mapTiles;
 	public Player player { get; private set; }
+
+	public int width { get; private set; }
+	public int height { get; private set; }
 
 	private readonly List<Floor> floors = new List<Floor>();
 	public int currentFloor { get; private set; } = -1;
@@ -22,11 +23,11 @@ public class Map : MonoBehaviour
 	// Start is called before the first frame update
 	void Awake()
 	{
-		width = Mathf.CeilToInt(Screen.width / mapTilePrefab.rectTransform.sizeDelta.x);
-		height = Mathf.CeilToInt(Screen.height / mapTilePrefab.rectTransform.sizeDelta.y);
+		width = Mathf.FloorToInt(MainMenu.instance.canvas.sizeDelta.x / MainMenu.instance.gridSize);
+		height = Mathf.FloorToInt(MainMenu.instance.canvas.sizeDelta.y / MainMenu.instance.gridSize);
 		mapTiles = new MapTile[width, height];
 
-		Camera.main.orthographicSize = Screen.height / 2;
+		// Camera.main.orthographicSize = Screen.height / 2;
 
 		for (int x = 0; x < width; x++)
 		{
@@ -34,6 +35,8 @@ public class Map : MonoBehaviour
 			{
 				mapTiles[x, y] = Instantiate(mapTilePrefab, transform);
 				mapTiles[x, y].map = this;
+				mapTiles[x, y].rectTransform.sizeDelta = new Vector2(MainMenu.instance.gridSize, MainMenu.instance.gridSize);
+				mapTiles[x, y].text.fontSize = MainMenu.instance.textSize;
 				mapTiles[x, y].SetPosition(x, y);
 				mapTiles[x, y].SetState(TileState.TileType.Wall);
 				mapTiles[x, y].SetVisible(false);
@@ -56,6 +59,8 @@ public class Map : MonoBehaviour
 	{
 		Entity entity = Instantiate(prefab, transform);
 		entity.map = this;
+		entity.rectTransform.sizeDelta = new Vector2(MainMenu.instance.gridSize, MainMenu.instance.gridSize);
+		entity.text.fontSize = MainMenu.instance.textSize;
 		entity.SetStartPosition(x, y);
 		return entity;
 	}
@@ -82,6 +87,7 @@ public class Map : MonoBehaviour
 		floors[currentFloor].ReDraw();
 		ClearVisibility();
 		player.SetStartPosition(floors[currentFloor].SpawnTile);
+		player.StartFloor();
 	}
 
 	public void GenerateMap(int mapSeed = -1, bool generateOverTime = false)
@@ -187,5 +193,10 @@ public class Map : MonoBehaviour
 	{
 		if (floorNumber < 0 || floorNumber >= floors.Count) return null;
 		return floors[floorNumber].GetTile(x, y);
+	}
+
+	public List<Mission> GetMissions()
+	{
+		return floors[currentFloor].GetMissions();
 	}
 }

@@ -22,7 +22,7 @@ public abstract class Entity : Tile
 
 	protected abstract void Update();
 
-	public void DoMove()
+	public virtual void DoMove()
 	{
 		SetPosition(targetX, targetY);
 	}

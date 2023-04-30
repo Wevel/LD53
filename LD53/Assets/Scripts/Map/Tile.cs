@@ -36,9 +36,10 @@ public abstract class Tile : MonoBehaviour
 
 	public void SetVisible(bool visible)
 	{
-		if (map.seeAll) visible = true;
 		this.visible = visible;
-		text.enabled = visible;
+
+		if (frontValue != '\0') text.enabled = true;
+		else text.enabled = visible || map.seeAll;
 	}
 
 	public void SetValue(char value, bool front = false)
@@ -54,7 +55,7 @@ public abstract class Tile : MonoBehaviour
 		else
 		{
 			text.text = backValue + "";
-			text.enabled = visible;
+			text.enabled = visible || map.seeAll;
 		}
 	}
 

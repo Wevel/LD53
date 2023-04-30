@@ -20,6 +20,8 @@ public class Floor
 	private readonly List<Vector2Int> stairs = new List<Vector2Int>();
 	private readonly List<Vector2Int> targetLocations = new List<Vector2Int>();
 
+	private Random missionRandom;
+
 	public IEnumerable<Entity> Entities => entities;
 	public IEnumerable<Vector2Int> Targets => targetLocations;
 	public IEnumerable<Vector2Int> Stairs => stairs;
@@ -58,6 +60,7 @@ public class Floor
 	private IEnumerator generateCoroutine()
 	{
 		Random random = new Random(seed);
+		missionRandom = new Random(random.Next());
 
 		// Generate tiles
 		for (int x = 0; x < width; x++)
@@ -219,7 +222,11 @@ public class Floor
 	public void Hide()
 	{
 		// Hide entities
-		foreach (Entity entity in entities) entity.SetVisible(false);
+		foreach (Entity entity in entities)
+		{
+			entity.gameObject.SetActive(false);
+			entity.SetVisible(false);
+		}
 	}
 
 	public void ReDraw()
@@ -233,7 +240,11 @@ public class Floor
 		}
 
 		// Show entities
-		foreach (Entity entity in entities) entity.SetVisible(true);
+		foreach (Entity entity in entities)
+		{
+			entity.gameObject.SetActive(true);
+			entity.SetVisible(true);
+		}
 	}
 
 	public void ActivateTile(int x, int y)
@@ -263,5 +274,43 @@ public class Floor
 	{
 		if (x < 0 || x >= width || y < 0 || y >= height) return null;
 		return mapTiles[x, y];
+	}
+
+	public List<Mission> GetPossibleMissions()
+	{
+		List<Mission> possibleMissions = new List<Mission>();
+
+		// Add target missions
+		Mission newMission;
+		foreach (Vector2Int targetLocation in targetLocations)
+		{
+			if (targetLocation.x == map.player.x && targetLocation.y == map.player.y) continue;
+			newMission = MissionGenerator.instance.GenerateMission(map, GetTile(map.player.x, map.player.y), GetTile(targetLocation.x, targetLocation.y), missionRandom);
+			if (newMission != null) possibleMissions.Add(newMission);
+		}
+
+		return possibleMissions;
+	}
+
+	public List<Mission> GetMissions()
+	{
+		List<Mission> possibleMissions = GetPossibleMissions();
+
+		// Randomly include a missions on the next floor
+		List<Mission> nextFloorMissions = map.GetFloor(map.currentFloor + 1).GetPossibleMissions();
+		int maxNextFloorMissions = Mathf.Min(map.player.completedMissionsThisFloor, nextFloorMissions.Count);
+		for (int i = 0; i < maxNextFloorMissions; i++) possibleMissions.Add(Mission.GetRandom(nextFloorMissions, missionRandom));
+
+		if (possibleMissions.Count == 0) return new List<Mission>();
+
+		// Pick 3 random missions
+		List<Mission> missions = new List<Mission>();
+		for (int i = 0; i < 3; i++)
+		{
+			if (possibleMissions.Count == 0) break;
+			missions.Add(Mission.GetRandom(possibleMissions, missionRandom));
+		}
+
+		return missions;
 	}
 }
