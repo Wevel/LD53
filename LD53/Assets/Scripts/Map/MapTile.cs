@@ -6,8 +6,12 @@ public class MapTile : Tile
 {
 	public static readonly Dictionary<TileState.TileType, char> TileMap = new Dictionary<TileState.TileType, char>();
 
+	public const string FloorColour = "<color=#1C3D00>";
+	public const string StairActiveColour = "<color=#00FFBA>";
+
 	static MapTile()
 	{
+		// Default #74FF00
 		TileMap.Add(TileState.TileType.Empty, '.');
 		TileMap.Add(TileState.TileType.Wall, '#');
 		TileMap.Add(TileState.TileType.Door, '+');
@@ -21,8 +25,11 @@ public class MapTile : Tile
 	{
 		if (TileMap.TryGetValue(tileType, out char value))
 		{
+			string targetColour = "";
+			if (tileType == TileState.TileType.StairsUp || tileType == TileState.TileType.StairsDown) targetColour = StairActiveColour;
+
 			this.tileType = tileType;
-			SetValue(value, Layer.Background);
+			SetValue(value, tileType == TileState.TileType.Empty ? FloorColour : "", targetColour, Layer.Map);
 		}
 		else
 		{

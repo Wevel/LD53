@@ -7,9 +7,23 @@ public abstract class Tile : MonoBehaviour
 {
 	public enum Layer : int
 	{
-		Background = 0,
-		Foreground = 1,
-		Overlay = 2
+		Map = 0,
+		Entities = 1,
+		Player = 2,
+		Overlay = 3
+	}
+
+	public class LayerState
+	{
+		public char value = ' ';
+		public string standardColour = "";
+		public string targetColour = "";
+
+		public string GetString(bool target)
+		{
+			string colour = target ? targetColour : standardColour;
+			return (colour ?? "") + value;
+		}
 	}
 
 	public RectTransform rectTransform;
@@ -20,7 +34,7 @@ public abstract class Tile : MonoBehaviour
 	public int x { get; protected set; }
 	public int y { get; protected set; }
 
-	protected char[] layers;
+	protected LayerState[] layers;
 	private bool visible = true;
 	private bool target = false;
 
@@ -31,13 +45,13 @@ public abstract class Tile : MonoBehaviour
 	{
 		RectTransform thisRectTransform = GetComponent<RectTransform>();
 		thisRectTransform.sizeDelta = rectTransform.sizeDelta;
-		layers = new char[3];
+		layers = new LayerState[4];
 		SetJiggle(false);
 	}
 
 	void Update()
 	{
-		if (jiggle && layers[(int)Layer.Overlay] == '\0')
+		if (jiggle && layers[(int)Layer.Overlay] == null)
 		{
 			rectTransform.rotation = Quaternion.Euler(0f, 0f, Animations.instance.tileJiggleCurve.Evaluate(Time.time * jiggleSpeed) * jiggleScale);
 		}
@@ -79,26 +93,32 @@ public abstract class Tile : MonoBehaviour
 		UpdateDisplay();
 	}
 
-	public void SetValue(char value, Layer layer)
+	public void SetValue(char value, string standardColour, string targetColour, Layer layer)
 	{
-		layers[(int)layer] = value;
+		layers[(int)layer] = new LayerState { value = value, standardColour = standardColour, targetColour = targetColour };
+		UpdateDisplay();
+	}
+
+	public void ClearValue(Layer layer)
+	{
+		layers[(int)layer] = null;
 		UpdateDisplay();
 	}
 
 	public void UpdateDisplay()
 	{
-		if (layers[(int)Layer.Overlay] != '\0' && !MainMenu.instance.menuHidden)
+		if (layers[(int)Layer.Overlay] != null && !MainMenu.instance.menuHidden)
 		{
-			text.text = layers[(int)Layer.Overlay] + "";
+			text.text = layers[(int)Layer.Overlay].GetString(target);
 			text.enabled = true;
 			return;
 		}
 
 		for (int i = layers.Length - 2; i >= 0; i--)
 		{
-			if (layers[i] != '\0')
+			if (layers[i] != null)
 			{
-				text.text = layers[i] + "";
+				text.text = layers[i].GetString(target);
 				text.enabled = visible || map.seeAll || target;
 				break;
 			}

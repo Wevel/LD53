@@ -1,0 +1,12 @@
+Need to do:
+	Highlight targets more
+	Show current score
+	Show current lives
+	Sounds
+
+Could do:
+	Doors
+	Monsters (no)
+	Moving targets
+	Collected required items (no)
+	Transitions for floor/menu change

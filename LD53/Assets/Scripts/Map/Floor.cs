@@ -216,13 +216,18 @@ public class Floor
 		foreach (Entity entity in entities)
 		{
 			if (IsOpen(entity.targetX, entity.targetY)) entity.DoMove();
+			else entity.Show();
 		}
 	}
 
 	public void Hide()
 	{
 		// Hide entities
-		foreach (Entity entity in entities) entity.gameObject.SetActive(false);
+		foreach (Entity entity in entities)
+		{
+			entity.Hide();
+			entity.gameObject.SetActive(false);
+		}
 	}
 
 	public void ReDraw()
@@ -236,7 +241,11 @@ public class Floor
 		}
 
 		// Show entities
-		foreach (Entity entity in entities) entity.gameObject.SetActive(true);
+		foreach (Entity entity in entities)
+		{
+			entity.Show();
+			entity.gameObject.SetActive(true);
+		}
 	}
 
 	public void ActivateTile(int x, int y)

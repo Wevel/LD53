@@ -53,3 +53,5 @@ MonoBehaviour:
   closeViewRange: 5
   farViewRange: 10
   displayChar: 42
+  standardColour: <color=#1C3D00>
+  targetColour: <color=#FF6400>

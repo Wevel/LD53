@@ -37,7 +37,6 @@ public class MainMenu : MonoBehaviour
 	public Map mainMenuMapPrefab;
 	public Map mainGameMapPrefab;
 
-
 	public float gridSize = 25f;
 	public float textSize = 23f;
 
@@ -166,7 +165,6 @@ public class MainMenu : MonoBehaviour
 		addButton(exitButtonText, ExitGame);
 #endif
 		updateSelectedButton();
-
 	}
 
 	public void StartGame()
@@ -242,7 +240,7 @@ public class MainMenu : MonoBehaviour
 	private void showGameOverButtons()
 	{
 		clearMenu();
-		setButtonHeader($"You're not up to it... {currentMap.player.score}", ButtonType.Mission);
+		setButtonHeader($"You're not up to it... {currentMap.player.completedMissions} -> ${currentMap.player.score}", ButtonType.Mission);
 		addButton(restartButtonText, StartGame, ButtonType.Mission);
 		addButton(menuButtonText, StartMenu, ButtonType.Mission);
 		updateSelectedButton();
@@ -265,7 +263,7 @@ public class MainMenu : MonoBehaviour
 		{
 			for (int y = 0; y < currentMap.height; y++)
 			{
-				currentMap.mapTiles[x, y].SetValue('\0', Tile.Layer.Overlay);
+				currentMap.mapTiles[x, y].ClearValue(Tile.Layer.Overlay);
 			}
 		}
 	}
@@ -286,17 +284,17 @@ public class MainMenu : MonoBehaviour
 
 		for (int i = 0; i < text.Length; i++)
 		{
-			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', "", "", Tile.Layer.Overlay);
 		}
 
 		for (int i = 0; i < 5; i++)
 		{
-			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', "", "", Tile.Layer.Overlay);
 		}
 	}
 
@@ -318,17 +316,17 @@ public class MainMenu : MonoBehaviour
 
 		for (int i = 0; i < text.Length; i++)
 		{
-			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y + 2].SetValue(' ', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y + 1].SetValue('#', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y].SetValue(text[i], "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 1].SetValue('#', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + i, y - 2].SetValue(' ', "", "", Tile.Layer.Overlay);
 		}
 
 		for (int i = 0; i < 5; i++)
 		{
-			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX - 1, y + 2 - i].SetValue(' ', "", "", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + text.Length, y + 2 - i].SetValue(' ', "", "", Tile.Layer.Overlay);
 		}
 	}
 
@@ -343,8 +341,8 @@ public class MainMenu : MonoBehaviour
 
 			y = buttonPositionY - (i * buttonSpacing);
 			if (isButtonHeader) y -= buttonSpacing;
-			currentMap.mapTiles[buttonPositionX, y].SetValue(buttonChar, Tile.Layer.Overlay);
-			currentMap.mapTiles[buttonPositionX + currentButtonWidth - 1, y].SetValue(buttonChar, Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX, y].SetValue(buttonChar, "<color=#FF6400>", "<color=#FF6400>", Tile.Layer.Overlay);
+			currentMap.mapTiles[buttonPositionX + currentButtonWidth - 1, y].SetValue(buttonChar, "<color=#FF6400>", "<color=#FF6400>", Tile.Layer.Overlay);
 		}
 	}
 }

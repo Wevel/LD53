@@ -53,6 +53,7 @@ MonoBehaviour:
   rectTransform: {fileID: 8290437936671391814}
   text: {fileID: 4932529660136662826}
   map: {fileID: 0}
+  jiggle: 0
 --- !u!1 &4950784457819501440
 GameObject:
   m_ObjectHideFlags: 0

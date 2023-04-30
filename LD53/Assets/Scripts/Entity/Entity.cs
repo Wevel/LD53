@@ -9,6 +9,8 @@ public abstract class Entity : MonoBehaviour
 	public int closeViewRange = 5;
 	public int farViewRange = 10;
 	public char displayChar;
+	public string standardColour;
+	public string targetColour;
 
 	public int x { get; protected set; }
 	public int y { get; protected set; }
@@ -18,6 +20,8 @@ public abstract class Entity : MonoBehaviour
 
 	public int targetX { get => x + moveX; }
 	public int targetY { get => y + moveY; }
+
+	public TileState currentTile { get => map.GetTile(map.currentFloor, x, y); }
 
 	protected virtual void Start()
 	{
@@ -46,9 +50,19 @@ public abstract class Entity : MonoBehaviour
 
 	public virtual void SetPosition(int x, int y)
 	{
-		map.mapTiles[this.x, this.y].SetValue('\0', Tile.Layer.Foreground);
+		Hide();
 		this.x = x;
 		this.y = y;
-		map.mapTiles[this.x, this.y].SetValue(displayChar, Tile.Layer.Foreground);
+		Show();
+	}
+
+	public void Hide()
+	{
+		map.mapTiles[x, y].ClearValue(this is Player ? Tile.Layer.Player : Tile.Layer.Entities);
+	}
+
+	public void Show()
+	{
+		map.mapTiles[x, y].SetValue(displayChar, standardColour, targetColour, this is Player ? Tile.Layer.Player : Tile.Layer.Entities);
 	}
 }

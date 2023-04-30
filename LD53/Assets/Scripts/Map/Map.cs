@@ -82,11 +82,13 @@ public class Map : MonoBehaviour
 
 		Debug.Log($"Current floor: {currentFloor}");
 
+		player.Hide();
 		floors[currentFloor].ReDraw();
 		ClearVisibility();
 		ClearTargets();
 		player.SetStartPosition(floors[currentFloor].SpawnTile);
 		player.StartFloor();
+		player.Show();
 
 		if (player.currentMission != null) HighlightTarget(player.currentMission.target);
 	}

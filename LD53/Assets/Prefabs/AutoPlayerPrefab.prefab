@@ -53,6 +53,8 @@ MonoBehaviour:
   closeViewRange: 5
   farViewRange: 10
   displayChar: 64
+  standardColour: <color=#FF0055>
+  targetColour: <color=#FF0055>
   startingLives: 3
   moveDelayCurve:
     serializedVersion: 2

@@ -110,9 +110,7 @@ public static class Pathfinding
 			}
 			path.Reverse();
 
-			Debug.Log($"Start {start} to target {target} length {path.Count}");
 			return path;
-
 		}
 		else
 		{
