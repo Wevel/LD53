@@ -750,6 +750,61 @@ MonoBehaviour:
     finalWeight: 0.1
     minAmount: 1
     maxAmount: 5
+  - name: Scroll
+    initialWeight: 0.01
+    finalWeight: 0.1
+    minAmount: 2
+    maxAmount: 3
+  - name: Ink Pot
+    initialWeight: 0.1
+    finalWeight: 0.3
+    minAmount: 1
+    maxAmount: 3
+  - name: Onion
+    initialWeight: 0.4
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 8
+  - name: Pickaxe
+    initialWeight: 0.6
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 1
+  - name: Ladder
+    initialWeight: 0.1
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 1
+  - name: Pebble
+    initialWeight: 0.8
+    finalWeight: 0.1
+    minAmount: 1
+    maxAmount: 1
+  - name: Magic Pebble
+    initialWeight: 0.1
+    finalWeight: 0.8
+    minAmount: 1
+    maxAmount: 1
+  - name: Pet Rock
+    initialWeight: 0.1
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 1
+  - name: Sock
+    initialWeight: 1
+    finalWeight: 0.2
+    minAmount: 1
+    maxAmount: 3
+  - name: Condom
+    initialWeight: 0.001
+    finalWeight: 0.002
+    minAmount: 1
+    maxAmount: 1
+  - name: Pizza
+    initialWeight: 1
+    finalWeight: 1
+    minAmount: 1
+    maxAmount: 1
 --- !u!1 &1476885893
 GameObject:
   m_ObjectHideFlags: 0

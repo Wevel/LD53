@@ -20,6 +20,12 @@ public class MissionGenerator : MonoBehaviour
 			if (initialWeight < finalWeight) return Mathf.Clamp(Mathf.Lerp(initialWeight, finalWeight, progress), initialWeight, finalWeight);
 			else return Mathf.Clamp(Mathf.Lerp(initialWeight, finalWeight, progress), finalWeight, initialWeight);
 		}
+
+		public float GetQuantity(Random random, int floorNumber)
+		{
+			if (minAmount == maxAmount) return minAmount;
+			else return random.Next(minAmount, maxAmount) + floorNumber;
+		}
 	}
 
 	public static MissionGenerator instance { get; private set; }
@@ -51,7 +57,7 @@ public class MissionGenerator : MonoBehaviour
 	public Mission GenerateMission(Map map, TileState start, TileState end, Random random)
 	{
 		ItemName item = GetRandomItem(random, end.FloorNumber / 10f);
-		string name = $"{item.name} x{random.Next(item.minAmount, item.maxAmount) + end.FloorNumber}";
+		string name = $"{item.name} x{item.GetQuantity(random, end.FloorNumber)}";
 		List<PathNode> bestPath = Pathfinding.FindPath(map, start, end);
 		if (bestPath == null || bestPath.Count <= 8) return null;
 
