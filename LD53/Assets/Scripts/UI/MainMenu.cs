@@ -78,16 +78,16 @@ public class MainMenu : MonoBehaviour
 		{
 			if (Input.GetButtonDown("Cancel"))
 			{
-				if (paused) ResumeGame();
-				else PauseMenu();
+				if (state == MenuState.Pause) ResumeGame();
+				else if (state == MenuState.Running) PauseMenu();
 			}
 		}
 
 		if (menuButtons.Count > 0)
 		{
-			if (Input.GetButtonDown("Vertical"))
+			if (UserInput.instance.VerticalDown)
 			{
-				currentButton -= (int)Mathf.Sign(Input.GetAxisRaw("Vertical"));
+				currentButton -= UserInput.instance.Vertical;
 				currentButton = Mathf.Clamp(currentButton, 0, menuButtons.Count - 1);
 				updateSelectedButton();
 			}
@@ -97,17 +97,20 @@ public class MainMenu : MonoBehaviour
 			}
 		}
 
-#if UNITY_EDITOR
-		// Toggle entire map visibility
-		if (Input.GetKeyDown(KeyCode.F1))
+#if !UNITY_EDITOR
+		if (state == MenuState.Start || state == MenuState.GameOver)
+#endif
 		{
-			if (currentMap != null)
+			// Toggle entire map visibility
+			if (Input.GetKeyDown(KeyCode.F1))
 			{
-				currentMap.seeAll = !currentMap.seeAll;
-				currentMap.GetFloor(currentMap.currentFloor).ReDraw();
+				if (currentMap != null)
+				{
+					currentMap.seeAll = !currentMap.seeAll;
+					currentMap.GetFloor(currentMap.currentFloor).ReDraw();
+				}
 			}
 		}
-#endif
 
 		// Toggle menu visibility
 		if (Input.GetKeyDown(KeyCode.F2))

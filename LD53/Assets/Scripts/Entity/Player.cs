@@ -54,8 +54,8 @@ public class Player : Entity
 		}
 		else if (Time.time - lastMoveTime < moveDelayCurve.Evaluate(consecutiveMoves))
 		{
-			if (Input.GetButtonDown("Vertical")) moveY = (int)Mathf.Sign(Input.GetAxisRaw("Vertical"));
-			else if (Input.GetButtonDown("Horizontal")) moveX = (int)Mathf.Sign(Input.GetAxisRaw("Horizontal"));
+			if (UserInput.instance.VerticalDown) moveY = UserInput.instance.Vertical;
+			else if (UserInput.instance.HorizontalDown) moveX = UserInput.instance.Horizontal;
 
 			if (moveX != 0 || moveY != 0)
 			{
@@ -65,8 +65,8 @@ public class Player : Entity
 		}
 		else
 		{
-			if (Input.GetButton("Vertical")) moveY = (int)Mathf.Sign(Input.GetAxisRaw("Vertical"));
-			else if (Input.GetButton("Horizontal")) moveX = (int)Mathf.Sign(Input.GetAxisRaw("Horizontal"));
+			if (UserInput.instance.IsVertical) moveY = UserInput.instance.Vertical;
+			else if (UserInput.instance.IsHorizontal) moveX = UserInput.instance.Horizontal;
 
 			if (moveX != 0 || moveY != 0)
 			{
