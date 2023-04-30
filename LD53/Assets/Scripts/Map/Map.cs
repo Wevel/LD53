@@ -95,7 +95,7 @@ public class Map : MonoBehaviour
 
 	public void GenerateMap(int mapSeed = -1, bool generateOverTime = false)
 	{
-		seedOffset = mapSeed;
+		seedOffset = mapSeed > 0 ? mapSeed : Random.Range(0, 1000000);
 		NextFloor(generateOverTime);
 		Tick();
 	}
