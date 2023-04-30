@@ -103,6 +103,7 @@ public class Player : Entity
 			if (timeRemaining <= 0)
 			{
 				lives--;
+				Sounds.instance.PlayClip("LoseLife");
 				if (lives == 0) MainMenu.instance.GameOver();
 				else MainMenu.instance.MissionSelect(Mission.Outcome.Failure);
 			}

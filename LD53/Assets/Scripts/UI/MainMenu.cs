@@ -79,6 +79,7 @@ public class MainMenu : MonoBehaviour
 			{
 				if (state == MenuState.Pause) ResumeGame();
 				else if (state == MenuState.Running) PauseMenu();
+				Sounds.instance.PlayClip("UI_Interact");
 			}
 		}
 
@@ -89,10 +90,12 @@ public class MainMenu : MonoBehaviour
 				currentButton -= UserInput.instance.Vertical;
 				currentButton = Mathf.Clamp(currentButton, 0, menuButtons.Count - 1);
 				updateSelectedButton();
+				Sounds.instance.PlayClip("UI_Interact");
 			}
 			else if (Input.GetButtonDown("Submit"))
 			{
 				menuButtons[currentButton]();
+				Sounds.instance.PlayClip("UI_Interact");
 			}
 		}
 
@@ -107,6 +110,7 @@ public class MainMenu : MonoBehaviour
 				{
 					currentMap.seeAll = !currentMap.seeAll;
 					currentMap.GetFloor(currentMap.currentFloor).ReDraw();
+					Sounds.instance.PlayClip("UI_Interact");
 				}
 			}
 		}
@@ -118,6 +122,7 @@ public class MainMenu : MonoBehaviour
 			{
 				menuHidden = !menuHidden;
 				currentMap.UpdateDisplay();
+				Sounds.instance.PlayClip("UI_Interact");
 			}
 			else
 			{
