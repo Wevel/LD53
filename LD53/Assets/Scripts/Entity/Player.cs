@@ -100,7 +100,11 @@ public class Player : Entity
 		{
 			timeRemaining--;
 
-			if (timeRemaining <= 0)
+			if (currentMission.IsSuccess(this))
+			{
+				CompleteMission();
+			}
+			else if (timeRemaining <= 0)
 			{
 				lives--;
 				Sounds.instance.PlayClip("LoseLife");
