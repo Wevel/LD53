@@ -12,6 +12,7 @@ public abstract class Entity : MonoBehaviour
 	public string standardColour;
 	public string targetColour;
 
+	public int floorNumber { get; protected set; }
 	public int x { get; protected set; }
 	public int y { get; protected set; }
 
@@ -21,7 +22,7 @@ public abstract class Entity : MonoBehaviour
 	public int targetX { get => x + moveX; }
 	public int targetY { get => y + moveY; }
 
-	public TileState currentTile { get => map.GetTile(map.currentFloor, x, y); }
+	public TileState currentTile { get => map.GetTile(floorNumber, x, y); }
 
 	protected virtual void Start()
 	{
@@ -36,8 +37,9 @@ public abstract class Entity : MonoBehaviour
 		SetPosition(targetX, targetY);
 	}
 
-	public void SetStartPosition(int x, int y)
+	public void SetStartPosition(int floorNumber, int x, int y)
 	{
+		this.floorNumber = floorNumber;
 		this.x = x;
 		this.y = y;
 		SetPosition(x, y);
@@ -45,7 +47,7 @@ public abstract class Entity : MonoBehaviour
 
 	public void SetStartPosition(TileState tile)
 	{
-		SetStartPosition(tile.x, tile.y);
+		SetStartPosition(tile.FloorNumber, tile.x, tile.y);
 	}
 
 	public virtual void SetPosition(int x, int y)
@@ -63,6 +65,7 @@ public abstract class Entity : MonoBehaviour
 
 	public void Show()
 	{
-		map.mapTiles[x, y].SetValue(displayChar, standardColour, targetColour, this is Player ? Tile.Layer.Player : Tile.Layer.Entities);
+		if (floorNumber == map.currentFloor)
+			map.mapTiles[x, y].SetValue(displayChar, standardColour, targetColour, this is Player ? Tile.Layer.Player : Tile.Layer.Entities);
 	}
 }

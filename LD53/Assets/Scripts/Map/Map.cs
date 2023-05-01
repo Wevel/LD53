@@ -45,7 +45,7 @@ public class Map : MonoBehaviour
 			}
 		}
 
-		player = CreateEntity(width / 2, height / 2, playerPrefab) as Player;
+		player = CreateEntity(0, width / 2, height / 2, playerPrefab) as Player;
 	}
 
 	// Update is called once per frame
@@ -57,11 +57,11 @@ public class Map : MonoBehaviour
 		}
 	}
 
-	public Entity CreateEntity(int x, int y, Entity prefab)
+	public Entity CreateEntity(int floorNumber, int x, int y, Entity prefab)
 	{
 		Entity entity = Instantiate(prefab, transform);
 		entity.map = this;
-		entity.SetStartPosition(x, y);
+		entity.SetStartPosition(floorNumber, x, y);
 		return entity;
 	}
 
