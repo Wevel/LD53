@@ -63,7 +63,7 @@ public class MissionGenerator : MonoBehaviour
 
 		int pathLength = bestPath.Count;
 		int timeLimit = Mathf.CeilToInt(pathLength * Mathf.Max(3f - (end.FloorNumber * 0.15f), 1.15f));
-		int score = (5 * end.FloorNumber) + (5 * (end.FloorNumber - start.FloorNumber)) + (timeLimit / 20);
+		int score = (5 * start.FloorNumber) + (2 * (end.FloorNumber - start.FloorNumber)) + (timeLimit / 20);
 
 		return new Mission(name, start, end, pathLength, timeLimit, score);
 	}
