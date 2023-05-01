@@ -606,8 +606,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d5b694454ca2d341b674790f1fe3b76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPositionX: 7
-  buttonPositionY: 20
+  buttonPositionX: 15
+  buttonPositionY: 24
   buttonSpacing: 4
   buttonWidth: 12
   missionButtonWidth: 35
